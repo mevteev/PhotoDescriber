@@ -1,4 +1,4 @@
-package com.jewtiejew.whatisee.webservice.vo;
+package com.jewtiejew.photodescriber.webservice.vo;
 
 import java.io.Serializable;
 
