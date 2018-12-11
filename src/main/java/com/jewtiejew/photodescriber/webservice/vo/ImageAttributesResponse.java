@@ -13,7 +13,7 @@ public class ImageAttributesResponse extends Response {
     private final List<Celebrity> celebrities;
 
     public ImageAttributesResponse(List<Label> labels, List<FaceDetail> faceDetails, List<Celebrity> celebrities) {
-        super(labels.toString());
+        super(labels.toString() + "\n" + faceDetails.toString() + "\n" + celebrities.toString());
         this.labels = labels;
         this.faceDetails = faceDetails;
         this.celebrities = celebrities;

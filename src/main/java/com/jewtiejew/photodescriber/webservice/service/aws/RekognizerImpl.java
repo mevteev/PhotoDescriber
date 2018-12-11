@@ -17,10 +17,7 @@ public class RekognizerImpl implements Rekognizer {
     @Override
     public List<Label> getLabels(String bucket, String key) {
         DetectLabelsRequest request = new DetectLabelsRequest()
-                .withImage(new Image()
-                    .withS3Object(new S3Object()
-                        .withBucket(bucket)
-                        .withName(key)))
+                .withImage(getImage(bucket, key))
                     .withMaxLabels(10)
                     .withMinConfidence(75F);
 
@@ -38,11 +35,41 @@ public class RekognizerImpl implements Rekognizer {
 
     @Override
     public List<FaceDetail> getFaceDetails(String bucket, String key) {
-        return null;
+        DetectFacesRequest request = new DetectFacesRequest()
+                .withImage(getImage(bucket, key))
+                .withAttributes(Attribute.ALL);
+
+        try {
+            logger.info(String.format("Detect face in %s from S3 bucket %s...", key, bucket));
+            DetectFacesResult result = rekognitionClient.detectFaces(request);
+            logger.info(String.format("Detected face in %s from S3 bucket %s...", key, bucket));
+            return result.getFaceDetails();
+        } catch (AmazonRekognitionException e) {
+            logger.error(e.getMessage());
+        }
+        return Collections.EMPTY_LIST;
     }
 
     @Override
     public List<Celebrity> getCelebs(String bucket, String key) {
-        return null;
+        RecognizeCelebritiesRequest request = new RecognizeCelebritiesRequest()
+                .withImage(getImage(bucket, key));
+
+        try {
+            logger.info(String.format("Detect celebs in %s from S3 bucket %s...", key, bucket));
+            RecognizeCelebritiesResult result = rekognitionClient.recognizeCelebrities(request);
+            logger.info(String.format("Detected celebs in %s from S3 bucket %s...", key, bucket));
+            return result.getCelebrityFaces();
+        } catch (AmazonRekognitionException e) {
+            logger.error(e.getMessage());
+        }
+        return Collections.EMPTY_LIST;
+    }
+
+    private Image getImage(String bucket, String key) {
+        return new Image()
+                .withS3Object(new S3Object()
+                        .withBucket(bucket)
+                        .withName(key));
     }
 }

@@ -10,6 +10,7 @@ import com.jewtiejew.photodescriber.webservice.service.aws.S3ManagerImpl;
 import com.jewtiejew.photodescriber.webservice.vo.ImageAttributesResponse;
 import com.jewtiejew.photodescriber.webservice.vo.InputStreamS3Request;
 import com.jewtiejew.photodescriber.webservice.vo.Response;
+import com.jewtiejew.photodescriber.webservice.vo.S3Request;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,11 +31,16 @@ public class DescribeController {
         Rekognizer rekognizer = new RekognizerImpl();
         RecognizeImage recognizeImage = new RecognizeImage(rekognizer);
 
+        /*
         InputStreamS3Request request = new InputStreamS3Request();
         request.setStream(stream.getInputStream());
         request.setBucket(BUCKET);
         request.setKey(String.valueOf(new Date().getTime()) + ".jpg");
-        uploadFileToS3.process(request);
+        uploadFileToS3.process(request);*/
+
+        S3Request request = new S3Request();
+        request.setKey("1544529103069.jpg");
+        request.setBucket(BUCKET);
 
         return recognizeImage.process(request);
     }
