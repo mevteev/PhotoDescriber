@@ -1,8 +1,13 @@
 package com.jewtiejew.photodescriber.webservice.controller;
 
+import com.amazonaws.services.rekognition.model.Label;
+import com.jewtiejew.photodescriber.webservice.processor.RecognizeImage;
 import com.jewtiejew.photodescriber.webservice.processor.UploadFileToS3;
+import com.jewtiejew.photodescriber.webservice.service.aws.Rekognizer;
+import com.jewtiejew.photodescriber.webservice.service.aws.RekognizerImpl;
 import com.jewtiejew.photodescriber.webservice.service.aws.S3Manager;
 import com.jewtiejew.photodescriber.webservice.service.aws.S3ManagerImpl;
+import com.jewtiejew.photodescriber.webservice.vo.ImageAttributesResponse;
 import com.jewtiejew.photodescriber.webservice.vo.InputStreamS3Request;
 import com.jewtiejew.photodescriber.webservice.vo.Response;
 import org.springframework.web.bind.annotation.*;
@@ -11,21 +16,26 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 public class DescribeController {
+
+    public static final String BUCKET = "photo-describer-bucket";
 
     @RequestMapping(value = "/describe", method = RequestMethod.POST)
     public Response describe(@RequestParam("file") MultipartFile stream) throws IOException {
         S3Manager s3Manager = new S3ManagerImpl();
         UploadFileToS3 uploadFileToS3 = new UploadFileToS3(s3Manager);
+        Rekognizer rekognizer = new RekognizerImpl();
+        RecognizeImage recognizeImage = new RecognizeImage(rekognizer);
 
         InputStreamS3Request request = new InputStreamS3Request();
         request.setStream(stream.getInputStream());
-        request.setBucket("photo-describer-bucket");
+        request.setBucket(BUCKET);
         request.setKey(String.valueOf(new Date().getTime()) + ".jpg");
         uploadFileToS3.process(request);
 
-        return new Response(request.getKey());
+        return recognizeImage.process(request);
     }
 }

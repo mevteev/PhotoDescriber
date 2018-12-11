@@ -29,13 +29,14 @@ public class S3ManagerImpl implements S3Manager {
         PutObjectRequest putObjectRequest = getPutObjectRequest(stream, bucket, key);
         if (putObjectRequest != null) {
 
-            logger.info(String.format("Uploading file to S3 bucket %s...", bucket));
+            logger.info(String.format("Uploading %s to S3 bucket %s...", key, bucket));
             final AmazonS3 s3 = AmazonS3ClientBuilder.defaultClient();
             final TransferManager tm = TransferManagerBuilder.standard().withS3Client(s3).build();
             try {
                 Upload upload = tm.upload(putObjectRequest);
 
                 upload.waitForCompletion();
+                logger.info(String.format("Uploaded %s to S3 bucket %s...", key, bucket));
             } catch (AmazonServiceException | InterruptedException e) {
                 logger.error(e.toString());
             }
@@ -52,7 +53,7 @@ public class S3ManagerImpl implements S3Manager {
             PutObjectRequest request = new PutObjectRequest(bucket, key, byteArrayInputStream, metadata);
 
             request.setGeneralProgressListener(
-                    (event) -> logger.debug("Transferred bytes: " + event.getBytesTransferred())
+                    (event) -> logger.info("Transferred bytes: " + event.getBytesTransferred())
             );
 
             return request;
