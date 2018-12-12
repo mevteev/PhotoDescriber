@@ -23,7 +23,7 @@ public class RecognizeImage implements Processor {
             S3Request rq = (S3Request) request;
             return new ImageAttributesResponse(
                     rekognizer.getLabels(rq.getBucket(), rq.getKey()),
-                    Collections.EMPTY_LIST,
+                    rekognizer.getFaceDetails(rq.getBucket(), rq.getKey()),
                     Collections.EMPTY_LIST);
         } else {
             throw new IllegalArgumentException("Wrong request");
