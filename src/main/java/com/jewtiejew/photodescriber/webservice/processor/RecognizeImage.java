@@ -26,7 +26,7 @@ public class RecognizeImage implements Processor {
             return new ImageAttributesResponse(
                     rekognizer.getLabels(rq.getBucket(), rq.getKey()),
                     rekognizer.getFaceDetails(rq.getBucket(), rq.getKey()),
-                    Collections.EMPTY_LIST);
+                    rekognizer.getCelebs(rq.getBucket(), rq.getKey()));
         } else {
             throw new IllegalArgumentException("Wrong request");
         }

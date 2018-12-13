@@ -1,14 +1,10 @@
 package com.jewtiejew.photodescriber.webservice.controller;
 
-import com.amazonaws.services.rekognition.model.Label;
+import com.jewtiejew.photodescriber.webservice.processor.DescribeImage;
 import com.jewtiejew.photodescriber.webservice.processor.RecognizeImage;
 import com.jewtiejew.photodescriber.webservice.processor.UploadFileToS3;
-import com.jewtiejew.photodescriber.webservice.service.aws.Rekognizer;
-import com.jewtiejew.photodescriber.webservice.service.aws.RekognizerImpl;
-import com.jewtiejew.photodescriber.webservice.service.aws.S3Manager;
-import com.jewtiejew.photodescriber.webservice.service.aws.S3ManagerImpl;
+import com.jewtiejew.photodescriber.webservice.vo.DescribeImageRequest;
 import com.jewtiejew.photodescriber.webservice.vo.ImageAttributesResponse;
-import com.jewtiejew.photodescriber.webservice.vo.InputStreamS3Request;
 import com.jewtiejew.photodescriber.webservice.vo.Response;
 import com.jewtiejew.photodescriber.webservice.vo.S3Request;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Date;
-import java.util.List;
 
 @RestController
 public class DescribeController {
@@ -28,6 +21,9 @@ public class DescribeController {
 
     @Autowired
     private RecognizeImage recognizeImage;
+
+    @Autowired
+    private DescribeImage describeImage;
 
     public static final String BUCKET = "photo-describer-bucket";
 
@@ -45,6 +41,13 @@ public class DescribeController {
         request.setKey("1544529103069.jpg");
         request.setBucket(BUCKET);
 
-        return recognizeImage.process(request);
+        Response recognitionResult = recognizeImage.process(request);
+
+        DescribeImageRequest describeImageRequest = new DescribeImageRequest(
+                ((ImageAttributesResponse) recognitionResult).getLabels(),
+                ((ImageAttributesResponse) recognitionResult).getFaceDetails(),
+                ((ImageAttributesResponse) recognitionResult).getCelebrities());
+
+        return describeImage.process(describeImageRequest);
     }
 }

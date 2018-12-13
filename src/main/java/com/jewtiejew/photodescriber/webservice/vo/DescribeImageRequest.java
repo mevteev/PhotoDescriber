@@ -6,16 +6,15 @@ import com.amazonaws.services.rekognition.model.Label;
 
 import java.util.List;
 
-public class ImageAttributesResponse extends Response {
+public class DescribeImageRequest extends Request {
 
-    private final List<Label> labels;
-    private final List<FaceDetail> faceDetails;
-    private final List<Celebrity> celebrities;
+    private List<Label> labels;
+    private List<FaceDetail> faceDetail;
+    private List<Celebrity> celebrities;
 
-    public ImageAttributesResponse(List<Label> labels, List<FaceDetail> faceDetails, List<Celebrity> celebrities) {
-        super(labels.toString() + "\n" + faceDetails.toString() + "\n" + celebrities.toString());
+    public DescribeImageRequest(List<Label> labels, List<FaceDetail> faceDetail, List<Celebrity> celebrities) {
         this.labels = labels;
-        this.faceDetails = faceDetails;
+        this.faceDetail = faceDetail;
         this.celebrities = celebrities;
     }
 
@@ -24,7 +23,7 @@ public class ImageAttributesResponse extends Response {
     }
 
     public List<FaceDetail> getFaceDetails() {
-        return faceDetails;
+        return faceDetail;
     }
 
     public List<Celebrity> getCelebrities() {
