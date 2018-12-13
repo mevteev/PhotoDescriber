@@ -20,7 +20,7 @@ public class RekognizerImpl implements Rekognizer {
     public List<Label> getLabels(String bucket, String key) {
         DetectLabelsRequest request = new DetectLabelsRequest()
                 .withImage(getImage(bucket, key))
-                    .withMaxLabels(10)
+                    .withMaxLabels(5)
                     .withMinConfidence(75F);
 
         try {
