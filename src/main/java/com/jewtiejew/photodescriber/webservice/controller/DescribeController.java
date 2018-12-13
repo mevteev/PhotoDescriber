@@ -2,11 +2,9 @@ package com.jewtiejew.photodescriber.webservice.controller;
 
 import com.jewtiejew.photodescriber.webservice.processor.DescribeImage;
 import com.jewtiejew.photodescriber.webservice.processor.RecognizeImage;
+import com.jewtiejew.photodescriber.webservice.processor.TranslateText;
 import com.jewtiejew.photodescriber.webservice.processor.UploadFileToS3;
-import com.jewtiejew.photodescriber.webservice.vo.DescribeImageRequest;
-import com.jewtiejew.photodescriber.webservice.vo.ImageAttributesResponse;
-import com.jewtiejew.photodescriber.webservice.vo.Response;
-import com.jewtiejew.photodescriber.webservice.vo.S3Request;
+import com.jewtiejew.photodescriber.webservice.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +22,9 @@ public class DescribeController {
 
     @Autowired
     private DescribeImage describeImage;
+
+    @Autowired
+    private TranslateText translateText;
 
     public static final String BUCKET = "photo-describer-bucket";
 
@@ -48,6 +49,9 @@ public class DescribeController {
                 ((ImageAttributesResponse) recognitionResult).getFaceDetails(),
                 ((ImageAttributesResponse) recognitionResult).getCelebrities());
 
-        return describeImage.process(describeImageRequest);
+        Response describeImageResult = describeImage.process(describeImageRequest);
+
+        return translateText.process(new TranslateRequest(describeImageResult.getText(),
+                "en", "ru"));
     }
 }
