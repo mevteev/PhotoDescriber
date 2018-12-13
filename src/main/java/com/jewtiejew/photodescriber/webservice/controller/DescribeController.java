@@ -11,6 +11,7 @@ import com.jewtiejew.photodescriber.webservice.vo.ImageAttributesResponse;
 import com.jewtiejew.photodescriber.webservice.vo.InputStreamS3Request;
 import com.jewtiejew.photodescriber.webservice.vo.Response;
 import com.jewtiejew.photodescriber.webservice.vo.S3Request;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,14 +23,16 @@ import java.util.List;
 @RestController
 public class DescribeController {
 
+    @Autowired
+    private UploadFileToS3 uploadFileToS3;
+
+    @Autowired
+    private RecognizeImage recognizeImage;
+
     public static final String BUCKET = "photo-describer-bucket";
 
     @RequestMapping(value = "/describe", method = RequestMethod.POST)
     public Response describe(@RequestParam("file") MultipartFile stream) throws IOException {
-        S3Manager s3Manager = new S3ManagerImpl();
-        UploadFileToS3 uploadFileToS3 = new UploadFileToS3(s3Manager);
-        Rekognizer rekognizer = new RekognizerImpl();
-        RecognizeImage recognizeImage = new RecognizeImage(rekognizer);
 
         /*
         InputStreamS3Request request = new InputStreamS3Request();

@@ -5,9 +5,11 @@ import com.jewtiejew.photodescriber.webservice.vo.ImageAttributesResponse;
 import com.jewtiejew.photodescriber.webservice.vo.Request;
 import com.jewtiejew.photodescriber.webservice.vo.Response;
 import com.jewtiejew.photodescriber.webservice.vo.S3Request;
+import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
+@Service
 public class RecognizeImage implements Processor {
 
     private final Rekognizer rekognizer;

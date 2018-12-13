@@ -1,8 +1,6 @@
 package com.jewtiejew.photodescriber.webservice.service.aws;
 
 import com.amazonaws.AmazonServiceException;
-import com.amazonaws.event.ProgressEvent;
-import com.amazonaws.event.ProgressListener;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -11,15 +9,16 @@ import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
 import com.amazonaws.services.s3.transfer.Upload;
 import com.amazonaws.util.IOUtils;
-import com.jewtiejew.photodescriber.webservice.vo.InputStreamS3Request;
 import com.jewtiejew.photodescriber.webservice.vo.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+@Service
 public class S3ManagerImpl implements S3Manager {
 
     Logger logger = LoggerFactory.getLogger(S3ManagerImpl.class);
