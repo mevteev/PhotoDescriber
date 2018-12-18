@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UploadFileToS3 implements Processor {
+public class UploadFileToS3 implements Processor<InputStreamS3Request, Response> {
 
     private final S3Manager manager;
 
@@ -20,13 +20,7 @@ public class UploadFileToS3 implements Processor {
     Logger logger = LoggerFactory.getLogger(UploadFileToS3.class);
 
     @Override
-    public Response process(Request request) {
-
-        if (request instanceof InputStreamS3Request) {
-            InputStreamS3Request rq = (InputStreamS3Request)request;
-            return manager.uploadImage(rq.getStream(), rq.getBucket(), rq.getKey());
-        } else {
-            throw new IllegalArgumentException("Wrong request");
-        }
+    public Response process(InputStreamS3Request request) {
+        return manager.uploadImage(request.getStream(), request.getBucket(), request.getKey());
     }
 }
