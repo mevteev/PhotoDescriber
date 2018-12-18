@@ -20,7 +20,8 @@ public class TranslateText implements Processor {
 
         if (request instanceof TranslateRequest) {
             TranslateRequest rq = (TranslateRequest) request;
-            return new Response(translator.translate(rq.getText(), rq.getSourceLanguage(), rq.getDestLanguage()));
+            return new Response(rq.getText() + "\n" +
+                    translator.translate(rq.getText(), rq.getSourceLanguage(), rq.getDestLanguage()));
         } else {
             throw new IllegalArgumentException("Wrong request");
         }
