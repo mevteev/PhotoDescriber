@@ -26,8 +26,9 @@ public class TranslatorImpl implements Translator {
                 .withTargetLanguageCode(to);
 
         try {
-            logger.info("Translate text");
+            logger.info("Translate text {}", request.getText());
             TranslateTextResult result = client.translateText(request);
+            logger.info("Translated : {}", result.getTranslatedText());
             return result.getTranslatedText();
         } catch (AmazonTranslateException e) {
             logger.error(e.getMessage());

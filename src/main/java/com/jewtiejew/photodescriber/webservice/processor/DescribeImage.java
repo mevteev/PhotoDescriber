@@ -2,12 +2,11 @@ package com.jewtiejew.photodescriber.webservice.processor;
 
 import com.jewtiejew.photodescriber.webservice.service.text.Describer;
 import com.jewtiejew.photodescriber.webservice.vo.DescribeImageRequest;
-import com.jewtiejew.photodescriber.webservice.vo.Request;
 import com.jewtiejew.photodescriber.webservice.vo.Response;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DescribeImage implements Processor {
+public class DescribeImage implements Processor<DescribeImageRequest, Response> {
 
     private final Describer describer;
 
@@ -16,22 +15,16 @@ public class DescribeImage implements Processor {
     }
 
     @Override
-    public Response process(Request request) {
-        if (request instanceof DescribeImageRequest) {
-            DescribeImageRequest rq = (DescribeImageRequest) request;
+    public Response process(DescribeImageRequest request) {
+        StringBuilder text = new StringBuilder();
 
-            StringBuilder text = new StringBuilder();
+        text.append(describer.describeLabels(request.getLabels()));
 
-            text.append(describer.describeLabels(rq.getLabels()));
+        request.getFaceDetails().forEach(
+                (fd) -> text.append(describer.describeFace(fd))
+        );
 
-            rq.getFaceDetails().forEach(
-                    (fd) -> text.append(describer.describeFace(fd))
-            );
-
-            text.append(describer.describeCelebs(rq.getCelebrities()));
-            return new Response(text.toString());
-        } else {
-            throw new IllegalArgumentException("Wrong request");
-        }
+        text.append(describer.describeCelebs(request.getCelebrities()));
+        return new Response(text.toString());
     }
 }
