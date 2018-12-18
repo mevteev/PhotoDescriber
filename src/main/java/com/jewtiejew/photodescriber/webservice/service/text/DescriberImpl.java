@@ -20,14 +20,24 @@ public class DescriberImpl implements Describer {
                 /*if (label.getName().equals("Person")) {  // todo: ?????
                     return "";
                 }*/
-                text.append(label.getName());
+                text.append(label.getName().toLowerCase());
                 text.append(", ");
             }
             text.setLength(text.length() - 2);
         }
-        text.append(".");
-
+        text.append(". ");
+        replaceLastComma(text);
         return text.toString();
+    }
+
+    /**
+     * replaces last comma in sentence by 'and'
+     * @param text
+     * @return
+     */
+    protected StringBuilder replaceLastComma(StringBuilder text) {
+        int lastIndex = text.lastIndexOf(",");
+        return text.replace(lastIndex, lastIndex + 1, " and");
     }
 
     @Override
