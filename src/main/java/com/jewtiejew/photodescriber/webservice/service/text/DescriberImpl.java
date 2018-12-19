@@ -37,6 +37,9 @@ public class DescriberImpl implements Describer {
      */
     protected StringBuilder replaceLastComma(StringBuilder text) {
         int lastIndex = text.lastIndexOf(",");
+        if (lastIndex == -1) {
+            return text;
+        }
         return text.replace(lastIndex, lastIndex + 1, " and");
     }
 
