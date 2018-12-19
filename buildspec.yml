@@ -11,5 +11,6 @@ phases:
       - mvn package
 artifacts:
   files:
+    - Procfile
     - target/photo-describer-1.0-SNAPSHOT.jar
     - .ebextensions/**/*

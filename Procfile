@@ -1,0 +1,1 @@
+web: java -jar target/photo-describer-1.0-SNAPSHOT.jar
