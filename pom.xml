@@ -9,8 +9,8 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.jewtiejew.photodescriber</groupId>
-    <artifactId>webservice</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>photo-describer</artifactId>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>webservice</name>
     <description>Demo project for Spring Boot</description>
