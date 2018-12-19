@@ -12,3 +12,4 @@ phases:
 artifacts:
   files:
     - target/photo-describer-1.0-SNAPSHOT.jar
+    - .ebextensions/**/*
