@@ -35,34 +35,38 @@ public class DescribeController {
     @RequestMapping(value = "/describe", method = RequestMethod.POST)
     public void describe(@RequestParam("file") MultipartFile stream, HttpServletResponse response) throws IOException {
 
-        InputStreamS3Request request = new InputStreamS3Request();
-        request.setStream(stream.getInputStream());
-        request.setBucket(BUCKET);
-        request.setKey(String.valueOf(new Date().getTime()) + ".jpg");
-        uploadFileToS3.process(request);
+        try {
+            InputStreamS3Request request = new InputStreamS3Request();
+            request.setStream(stream.getInputStream());
+            request.setBucket(BUCKET);
+            request.setKey(String.valueOf(new Date().getTime()) + ".jpg");
+            uploadFileToS3.process(request);
 
-        S3Request s3Request = new S3Request();
-        s3Request.setKey(request.getKey());
-        s3Request.setBucket(BUCKET);
+            S3Request s3Request = new S3Request();
+            s3Request.setKey(request.getKey());
+            s3Request.setBucket(BUCKET);
 
-        Response recognitionResult = recognizeImage.process(s3Request);
+            Response recognitionResult = recognizeImage.process(s3Request);
 
-        DescribeImageRequest describeImageRequest = new DescribeImageRequest(
-                ((ImageAttributesResponse) recognitionResult).getLabels(),
-                ((ImageAttributesResponse) recognitionResult).getFaceDetails(),
-                ((ImageAttributesResponse) recognitionResult).getCelebrities());
+            DescribeImageRequest describeImageRequest = new DescribeImageRequest(
+                    ((ImageAttributesResponse) recognitionResult).getLabels(),
+                    ((ImageAttributesResponse) recognitionResult).getFaceDetails(),
+                    ((ImageAttributesResponse) recognitionResult).getCelebrities());
 
-        Response describeImageResult = describeImage.process(describeImageRequest);
+            Response describeImageResult = describeImage.process(describeImageRequest);
 
-        Response translatedText = translateText.process(new TranslateRequest(describeImageResult.getText(),
-                "en", "ru"));
+            Response translatedText = translateText.process(new TranslateRequest(describeImageResult.getText(),
+                    "en", "ru"));
 
-        InputStream voiceStream = speakText.process(new DescribeVoiceRequest(translatedText.getText())).getStream();
+            InputStream voiceStream = speakText.process(new DescribeVoiceRequest(translatedText.getText())).getStream();
 
-        response.addHeader("Content-disposition", "attachment;filename=speech.mp3");
-        response.setContentType("audio/mpeg");
+            response.addHeader("Content-disposition", "attachment;filename=speech.mp3");
+            response.setContentType("audio/mpeg");
 
-        IOUtils.copy(voiceStream, response.getOutputStream());
-        response.flushBuffer();
+            IOUtils.copy(voiceStream, response.getOutputStream());
+            response.flushBuffer();
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+        }
     }
 }
