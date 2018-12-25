@@ -63,10 +63,15 @@ public class DescribeController {
             response.addHeader("Content-disposition", "attachment;filename=speech.mp3");
             response.setContentType("audio/mpeg");
 
+            response.setCharacterEncoding("UTF-8");
+            response.addHeader("OriginalText", describeImageResult.getText());
+            response.addHeader("TranslatedText", translatedText.getText());
+
             IOUtils.copy(voiceStream, response.getOutputStream());
             response.flushBuffer();
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         }
     }
+
 }
