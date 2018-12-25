@@ -32,7 +32,7 @@ public class DescribeController {
 
     public static final String BUCKET = "photo-describer-bucket";
 
-    @RequestMapping(value = "/describe", method = RequestMethod.GET)
+    @RequestMapping(value = "/describe", method = RequestMethod.POST)
     public void describe(@RequestParam("file") MultipartFile stream, HttpServletResponse response) throws IOException {
 
         InputStreamS3Request request = new InputStreamS3Request();
