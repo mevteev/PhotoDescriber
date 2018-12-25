@@ -31,8 +31,8 @@ public class RekognizerImpl implements Rekognizer {
             return result.getLabels();
         } catch (AmazonRekognitionException e) {
             logger.error(e.getMessage());
+            throw e;
         }
-        return Collections.EMPTY_LIST;
     }
 
     @Override
@@ -48,8 +48,8 @@ public class RekognizerImpl implements Rekognizer {
             return result.getFaceDetails();
         } catch (AmazonRekognitionException e) {
             logger.error(e.getMessage());
+            throw e;
         }
-        return Collections.EMPTY_LIST;
     }
 
     @Override
@@ -64,8 +64,8 @@ public class RekognizerImpl implements Rekognizer {
             return result.getCelebrityFaces();
         } catch (AmazonRekognitionException e) {
             logger.error(e.getMessage());
+            throw e;
         }
-        return Collections.EMPTY_LIST;
     }
 
     private Image getImage(String bucket, String key) {

@@ -32,7 +32,7 @@ public class TranslatorImpl implements Translator {
             return result.getTranslatedText();
         } catch (AmazonTranslateException e) {
             logger.error(e.getMessage());
+            throw e;
         }
-        return "Error";
     }
 }

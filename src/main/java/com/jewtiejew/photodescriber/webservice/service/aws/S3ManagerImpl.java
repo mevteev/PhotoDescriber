@@ -36,9 +36,14 @@ public class S3ManagerImpl implements S3Manager {
 
                 upload.waitForCompletion();
                 logger.info(String.format("Uploaded %s to S3 bucket %s...", key, bucket));
-            } catch (AmazonServiceException | InterruptedException e) {
-                logger.error(e.toString());
+            } catch (InterruptedException e) {
+                logger.error(e.getMessage());
+            } catch (AmazonServiceException e) {
+                logger.error(e.getMessage());
+                throw e;
             }
+        } else {
+            throw new RuntimeException("Error during uploading image");
         }
         return null;
     }
@@ -58,8 +63,8 @@ public class S3ManagerImpl implements S3Manager {
             return request;
         } catch (IOException e) {
             logger.error(e.getMessage());
-            return null;
         }
+        return null;
     }
 
     @Override

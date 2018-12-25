@@ -14,7 +14,7 @@ import java.io.InputStream;
 public class VoiceDescriberImpl implements VoiceDescriber {
 
     private final AmazonPolly client = AmazonPollyClientBuilder.defaultClient();
-    Logger logger = LoggerFactory.getLogger(RekognizerImpl.class);
+    private Logger logger = LoggerFactory.getLogger(RekognizerImpl.class);
 
     @Override
     public InputStream describe(String text, VoiceId voiceId, OutputFormat outputFormat) {
@@ -29,7 +29,7 @@ public class VoiceDescriberImpl implements VoiceDescriber {
             return result.getAudioStream();
         } catch (AmazonPollyException e) {
             logger.error(e.getMessage());
-            return null;
+            throw e;
         }
     }
 }
