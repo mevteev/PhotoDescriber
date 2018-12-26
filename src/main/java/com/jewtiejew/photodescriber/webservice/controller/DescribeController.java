@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.util.Date;
 
 @RestController
@@ -60,18 +61,22 @@ public class DescribeController {
 
             InputStream voiceStream = speakText.process(new DescribeVoiceRequest(translatedText.getText())).getStream();
 
-            response.addHeader("Content-disposition", "attachment;filename=speech.mp3");
-            response.setContentType("audio/mpeg");
-
-            response.setCharacterEncoding("UTF-8");
-            response.addHeader("OriginalText", describeImageResult.getText());
-            response.addHeader("TranslatedText", translatedText.getText());
-
-            IOUtils.copy(voiceStream, response.getOutputStream());
-            response.flushBuffer();
+            fillServerResponse(response, describeImageResult, translatedText, voiceStream);
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+        } finally {
+            response.flushBuffer();
         }
+    }
+
+    private void fillServerResponse(HttpServletResponse response, Response describeImageResult, Response translatedText, InputStream voiceStream) throws IOException {
+        response.addHeader("Content-disposition", "attachment;filename=speech.mp3");
+        response.setContentType("audio/mpeg");
+
+        response.addHeader("OriginalText", describeImageResult.getText());
+        response.addHeader("TranslatedText", URLEncoder.encode(translatedText.getText(), "UTF-8"));
+
+        IOUtils.copy(voiceStream, response.getOutputStream());
     }
 
 }
