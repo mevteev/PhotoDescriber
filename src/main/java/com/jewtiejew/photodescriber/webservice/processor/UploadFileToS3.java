@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 public class UploadFileToS3 implements Processor<InputStreamS3Request, Response> {
 
     private final S3Manager manager;
+    private Logger logger = LoggerFactory.getLogger(UploadFileToS3.class);
 
     public UploadFileToS3(S3Manager manager) {
         this.manager = manager;
     }
 
-    Logger logger = LoggerFactory.getLogger(UploadFileToS3.class);
 
     @Override
     public Response process(InputStreamS3Request request) {

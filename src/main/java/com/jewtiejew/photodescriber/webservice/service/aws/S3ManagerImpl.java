@@ -21,7 +21,7 @@ import java.io.InputStream;
 @Service
 public class S3ManagerImpl implements S3Manager {
 
-    Logger logger = LoggerFactory.getLogger(S3ManagerImpl.class);
+    private Logger logger = LoggerFactory.getLogger(S3ManagerImpl.class);
 
     @Override
     public Response uploadImage(InputStream stream, String bucket, String key) {
