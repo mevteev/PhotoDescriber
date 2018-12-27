@@ -26,7 +26,7 @@ public class DescriberImpl implements Describer {
             text.setLength(text.length() - 2);
         }
         text.append(". ");
-        replaceLastComma(text);
+        //replaceLastComma(text); // TODO: move after translating
         return text.toString();
     }
 

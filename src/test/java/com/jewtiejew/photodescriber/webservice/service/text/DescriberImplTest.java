@@ -2,6 +2,8 @@ package com.jewtiejew.photodescriber.webservice.service.text;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 public class DescriberImplTest {
 
     private DescriberImpl describer = new DescriberImpl();
@@ -11,6 +13,6 @@ public class DescriberImplTest {
         String text = "I see book, button, phone, car, computer";
         String expected = "I see book, button, phone, car and computer";
 
-        assert expected.equals(describer.replaceLastComma(new StringBuilder(text)).toString());
+        assertEquals(expected,describer.replaceLastComma(new StringBuilder(text)).toString());
     }
 }
