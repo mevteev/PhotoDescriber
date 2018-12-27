@@ -13,8 +13,8 @@ import java.util.List;
 @Service
 public class RekognizerImpl implements Rekognizer {
 
-    AmazonRekognition rekognitionClient = AmazonRekognitionClientBuilder.defaultClient();
-    Logger logger = LoggerFactory.getLogger(RekognizerImpl.class);
+    private AmazonRekognition rekognitionClient = AmazonRekognitionClientBuilder.defaultClient();
+    private Logger logger = LoggerFactory.getLogger(RekognizerImpl.class);
 
     @Override
     public List<Label> getLabels(String bucket, String key) {

@@ -14,8 +14,8 @@ import java.util.function.Function;
 @Service
 public class TranslatorImpl implements Translator {
 
-    AmazonTranslate client = AmazonTranslateClientBuilder.defaultClient();
-    Logger logger = LoggerFactory.getLogger(RekognizerImpl.class);
+    private AmazonTranslate client = AmazonTranslateClientBuilder.defaultClient();
+    private Logger logger = LoggerFactory.getLogger(RekognizerImpl.class);
 
 
     @Override
