@@ -56,10 +56,6 @@ public class S3ManagerImpl implements S3Manager {
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bites);
             PutObjectRequest request = new PutObjectRequest(bucket, key, byteArrayInputStream, metadata);
 
-            request.setGeneralProgressListener(
-                    (event) -> logger.info("Transferred bytes: " + event.getBytesTransferred())
-            );
-
             return request;
         } catch (IOException e) {
             logger.error(e.getMessage());
